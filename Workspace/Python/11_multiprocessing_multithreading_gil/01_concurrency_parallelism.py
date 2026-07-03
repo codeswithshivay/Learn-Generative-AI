@@ -1,0 +1,1 @@
+# Video 79 - Watched it and builded a deep mental model
