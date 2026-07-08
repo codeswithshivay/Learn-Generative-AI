@@ -1,0 +1,1 @@
+# Understanded it and builded a deep mental model
