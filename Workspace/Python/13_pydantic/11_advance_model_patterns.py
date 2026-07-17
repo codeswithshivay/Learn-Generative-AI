@@ -1,0 +1,1 @@
+# Video 99 - Advanced Model Patterns in Pydantic, Just watched it
