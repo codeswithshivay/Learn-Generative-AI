@@ -1,0 +1,1 @@
+# Video 100 - Best Practices in Pydantic, All about watching this video
