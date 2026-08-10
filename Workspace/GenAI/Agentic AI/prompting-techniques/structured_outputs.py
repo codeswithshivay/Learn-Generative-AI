@@ -1,7 +1,7 @@
-# Few-shot prompting:
-# A technique where the Large Language Model (LLM) is provided with one or more 
-# examples (shots) demonstrating the desired behavior, format, or style of the response.
-# This guides the model to learn the pattern and apply it to the new user request.
+# Structured outputs:
+# A technique or feature that ensures a Large Language Model (LLM) responds with data
+# conforming to a specific, predefined structure or schema (such as JSON), making the
+# output predictable and easy to parse programmatically.
 
 
 # Imports
@@ -50,7 +50,7 @@ SYSTEM_PROMPT = \
   6. If "is_applicable" is true, set "response" to the answer.
 """
 
-USER_PROMPT = "What's your name?"
+USER_PROMPT = "What's your name?, Teach me python"
 
 # Request
 response = client.chat.completions.create(
