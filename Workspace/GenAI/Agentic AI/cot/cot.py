@@ -117,50 +117,28 @@ TechAssistant Response:
 }
 """
 
-USER_PROMPT = """
-Write an database schema for the users table that should be able to store information like.
-
-- Username
-- Password
-- Email
-....
-
-any additional if you think adding will be better
-
-our product is related to credit card management / credit card information storage.
-"""
+USER_PROMPT = input('👉 ')
 
 # Initialize messages with the conversation context
 messages = [
    { "role": "system", "content": SYSTEM_PROMPT },
-   { "role": "assistant", "content": """{
-  "final": false,
-  "response": "[START]\nI have identified the requirement: designing a robust database schema for a `users` table tailored specifically for a credit card management and financial storage product. Given the sensitive nature of financial data, standard user schemas are insufficient; we must incorporate security, compliance, and auditing best practices from the start. I will outline the design approach, focusing on security, data integrity, and regulatory compliance (such as PCI-DSS)."
-}"""},
-   { "role": "assistant", "content": """
-   {
-  "final": false,
-  "response": "[THINKING: Security and Cryptographic Storage Requirements]\nSince our product involves credit card management and financial storage, storing raw passwords or plain user data is a critical security vulnerability and a violation of compliance standards like PCI-DSS. The `users` table must include specific fields to handle secure authentication and cryptographic integrity. Specifically, we need fields to support strong password hashing (e.g., Argon2id or bcrypt) and account lifecycle management, such as lockout states and multi-factor authentication (MFA) enforcement."
-}
-   """ },
-   { "role": "assistant", "content": """
-      {
-  "final": false,
-  "response": "[THINKING: Database Indexing and Performance]
-For a financial and credit card management application, query performance on identification fields (like `email` and `username`) must be optimal to prevent timing attacks and latency during high-frequency API calls. Additionally, data consistency is paramount, so we must use proper constraints (like `UNIQUE`, `NOT NULL`, and strict foreign key definitions) and ensure our primary key strategy uses a secure identifier format like UUIDv4 or ULID to prevent enumeration attacks common with sequential integer IDs."
-}
-   """ },
    { "role": "user", "content": USER_PROMPT }
 ]
 
-# LLM Call
-response = client.chat.completions.create(
-   model="gemini-3.5-flash-lite",
-   response_format={"type": "json_object"},
-   messages=messages
-)
+while True:
+  # LLM Call
+  response = client.chat.completions.create(
+    model="gemini-3.5-flash-lite",
+    response_format={"type": "json_object"},
+    messages=messages
+  )
 
-# Response message
-response_message = response.choices[0].message
-content = response_message.content
-print(content)
+  # Response message
+  response_message = response.choices[0].message.content
+  content = json.loads(response_message)
+  print(f"\n🧠 {content.get('response', '')}\n")
+  if bool(content.get('final')):
+    break
+  else:
+    messages.append({"role": "assistant", "content": response_message})
+    messages.append({"role": "user", "content": 'Continue to the next step.'})
