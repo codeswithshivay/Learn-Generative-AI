@@ -36,7 +36,7 @@ export type ChatMessage = z.infer<typeof chatMessageSchema>;
 
 export const assistantReplySchema = chatMessageSchema.extend({
   role: z.literal("assistant"),
-  service: z.literal("empty-llm"),
+  service: z.enum(["empty-llm", "llm"]),
   isDevelopmentPlaceholder: z.literal(true)
 });
 export type AssistantReply = z.infer<typeof assistantReplySchema>;

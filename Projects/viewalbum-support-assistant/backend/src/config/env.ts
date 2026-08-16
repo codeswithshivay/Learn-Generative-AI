@@ -35,8 +35,10 @@ function parsePort(value: string | undefined): number {
   return fallback;
 }
 
+
 export const env = {
   nodeEnv: process.env.NODE_ENV ?? "development",
   port: parsePort(process.env.PORT),
-  corsOrigins: parseOrigins(process.env.CORS_ORIGIN)
+  corsOrigins: parseOrigins(process.env.CORS_ORIGIN),
+  apiKey: process.env.API_KEY,
 } as const;

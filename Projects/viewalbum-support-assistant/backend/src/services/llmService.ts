@@ -1,25 +1,44 @@
+// Imports
 import type { AssistantReply, ChatMessageInput } from "../../../shared/chat";
+import client from '../config/openai';
 
 function createMessageId(): string {
   return `msg_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
 }
 
-/**
- * Intentionally empty LLM boundary.
- *
- * Replace this file when you are ready to implement the actual model/provider layer.
- * Do not add provider SDK calls, prompt text, personas, or response parsing here.
- */
+export async function callLLM(messages: ChatMessageInput[]):Promise<string> {
+  console.log('LLM called')
+  // SYSTEM PROMPT
+  const SYSTEM_PROMPT:string = `
+
+  `;
+
+  // LLM Call
+  const response = await client.chat.completions.create({
+    model: "gemini-3.5-flash-lite",
+    messages:[
+      { role: "system" , content:SYSTEM_PROMPT },
+      ...messages
+    ]
+  });
+
+  console.log('response came', response.choices[0].message.content);
+
+  return response.choices[0].message.content ?? "Sorry, I couldn't process that.";
+}
+
 export async function generateAssistantReply(
-  _messages: ChatMessageInput[]
+  messages: ChatMessageInput[]
 ): Promise<AssistantReply> {
+
+  const content = await callLLM(messages);
+  console.log('content available', content)
   return {
     id: createMessageId(),
     role: "assistant",
-    content:
-      "Development placeholder: the ViewAlbum LLM service is intentionally empty, so no model provider has been connected yet.",
+    content,
     createdAt: new Date().toISOString(),
-    service: "empty-llm",
+    service: "llm",
     isDevelopmentPlaceholder: true
   };
 }

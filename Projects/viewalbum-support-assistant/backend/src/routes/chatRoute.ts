@@ -7,7 +7,9 @@ export function createChatRouter() {
   const router = Router();
 
   router.post("/chat", async (request, response, next) => {
+    console.log('request came')
     try {
+      console.log('in try block')
       const parsed = chatRequestSchema.safeParse(request.body);
 
       if (!parsed.success) {
@@ -24,6 +26,7 @@ export function createChatRouter() {
       const reply = await generateAssistantReply(parsed.data.messages);
       response.status(200).json({ reply });
     } catch (error) {
+      console.log('in catch block', error)
       next(error);
     }
   });
