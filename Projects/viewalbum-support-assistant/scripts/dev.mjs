@@ -1,19 +1,16 @@
 import { spawn } from "node:child_process";
 import { join } from "node:path";
 
-const binDir = join(process.cwd(), "node_modules", ".bin");
-const isWindows = process.platform === "win32";
-
 const commands = [
   {
     name: "backend",
-    command: join(binDir, isWindows ? "tsx.cmd" : "tsx"),
-    args: ["watch", "backend/src/index.ts"]
+    command: process.execPath,
+    args: [join(process.cwd(), "node_modules", "tsx", "dist", "cli.mjs"), "watch", "backend/src/index.ts"]
   },
   {
     name: "frontend",
-    command: join(binDir, isWindows ? "next.cmd" : "next"),
-    args: ["dev"]
+    command: process.execPath,
+    args: [join(process.cwd(), "node_modules", "next", "dist", "bin", "next"), "dev"]
   }
 ];
 

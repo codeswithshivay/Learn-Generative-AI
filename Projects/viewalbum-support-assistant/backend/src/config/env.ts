@@ -1,6 +1,18 @@
+import { existsSync } from "node:fs";
+import { join } from "node:path";
+
 import dotenv from "dotenv";
 
-dotenv.config();
+const rootEnvPath = join(process.cwd(), ".env");
+const backendEnvPath = join(process.cwd(), "backend", ".env");
+
+if (existsSync(rootEnvPath)) {
+  dotenv.config({ path: rootEnvPath });
+}
+
+if (existsSync(backendEnvPath)) {
+  dotenv.config({ path: backendEnvPath, override: true });
+}
 
 function parseOrigins(value: string | undefined): string[] {
   const fallback = "http://localhost:3000";

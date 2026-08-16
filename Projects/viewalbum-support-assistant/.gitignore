@@ -4,3 +4,5 @@ dist
 .env.local
 .env
 backend/dist
+AGENTS.md
+CLAUDE.md

@@ -35,10 +35,18 @@ npm install
 copy .env.example .env
 ```
 
+If you prefer keeping backend-only settings under `backend/.env`, that is also supported.
+
 3. Start both apps.
 
 ```bash
 npm run dev
+```
+
+If PowerShell blocks `npm run dev` on your machine, use this Windows-safe alternative:
+
+```bash
+npm.cmd run dev
 ```
 
 4. Run the chat API contract tests.
@@ -83,4 +91,4 @@ Response body:
 
 ## LLM boundary
 
-The empty LLM service is documented in [`LLM_IMPLEMENTATION_TODO.md`](./LLM_IMPLEMENTATION_TODO.md). The backend is intentionally wired to stop at a placeholder response until you implement the actual model layer.
+The empty LLM service is documented in [`LLM_IMPLEMENTATION_TODO.md`](./LLM_IMPLEMENTATION_TODO.md). A short file index for the intentionally empty handoff point lives in [`EMPTY_HANDOFF_FILES.md`](./EMPTY_HANDOFF_FILES.md). The backend is intentionally wired to stop at a placeholder response until you implement the actual model layer.
