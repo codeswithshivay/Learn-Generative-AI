@@ -8,7 +8,7 @@
     "test": "tsx --test tests/api-chat.test.ts",
     "build": "next build",
     "typecheck": "tsc --noEmit && tsc -p backend/tsconfig.json --noEmit",
-    "start": "next start"
+    "start": "node scripts/start.mjs"
   },
   "dependencies": {
     "cors": "^2.8.5",
