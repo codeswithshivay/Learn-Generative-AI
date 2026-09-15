@@ -4,6 +4,8 @@ from openai.types.chat import ChatCompletionMessageParam, ChatCompletion
 from dotenv import load_dotenv
 import os
 import json
+from pydantic import Field, BaseModel
+from typing import Optional
 
 # Tools
 from tools import available_tools
@@ -259,50 +261,63 @@ message_history: list[ChatCompletionMessageParam] = [
    { "role": "user", "content": USER_PROMPT }
 ]
 
+class AgentResponse(BaseModel):
+  step: str = Field(..., description="One of: START, PLAN, TOOL, OBSERVE, END")
+  content: Optional[str] = Field(None, description="Content for START, PLAN, or END")
+  tool: Optional[str] = Field(None, description="Tool name, only for TOOL step")
+  input: Optional[str] = Field(None, description="Tool input, only for TOOL step")
+  output: Optional[str] = Field(None, description="Tool output, only for OBSERVE step")
+
 while True:
    # LLM Call
-   json_response = client.chat.completions.create(
-      model="gemini-2-flash-lite",
+   response = client.beta.chat.completions.parse(
+      model="gemini-3.5-flash",
       messages=message_history,
-      response_format={ "type": "json_object" }
+      response_format=AgentResponse,
    )
 
-   raw_content = json_response.choices[0].message.content
-   if raw_content:
-      response = json.loads(raw_content)
-      print(f"🧠 {response}")
+   content = response.choices[0].message.parsed
 
-      step = response.get("step")
-      
-      if step == "TOOL":
-         message_history.append({
-               "role": "assistant",
-               "content": raw_content
-         })
+   if content is None:
+      # Log the raw refusal / raw output for debugging
+      print("⚠️ Parse failed. Raw message:")
+      print(response.choices[0].message)
+      break
 
-         input_text = response.get("input")
-         tool_name = response.get("tool")
+   print(f"🧠 {content}")
+   step = content.step
+    
+   if step == "TOOL":
+      message_history.append({
+            "role": "assistant",
+            "content": content.content
+      })
 
-         tool = available_tools[tool_name]
-         tool_output = tool(input_text)
+      input_text = content.input
+      tool_name = content.tool
 
-         message_history.append({
-            "role": "developer",
-            "content": json.dumps({
-                  "step": "OBSERVE",
-                  "output": tool_output
-            })
-         })
+      # pyrefly: ignore [bad-index]
+      tool = available_tools[tool_name]
+      assert input_text is not None
+      tool_output = tool(input_text)
 
-         message_history.append({
-            "role": "user",
-            "content": "Continue to the next step."
-         })
+      message_history.append({
+        "role": "developer",
+        "content": json.dumps({
+              "step": "OBSERVE",
+              "output": tool_output
+        })
+      })
 
-         continue
+      message_history.append({
+        "role": "user",
+        "content": "Continue to the next step."
+      })
 
-      elif step == "END":
-         break
+      continue
 
-      message_history.append({ "role": "assistant", "content": raw_content })
-      message_history.append({ "role": "user", "content": "Continue to the next step." })
+   elif step == "END":
+      break
+
+   message_history.append({ "role": "assistant", "content": content.content })
+   message_history.append({ "role": "user", "content": "Continue to the next step." })

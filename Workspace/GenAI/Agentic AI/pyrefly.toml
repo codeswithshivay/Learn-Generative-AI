@@ -1,1 +1,5 @@
 python-interpreter-path = ".venv/Scripts/python.exe"
+search-path = [
+    ".",
+    "ai-agents-and-agentic-workflows"
+]

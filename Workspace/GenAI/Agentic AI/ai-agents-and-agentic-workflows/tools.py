@@ -9,7 +9,7 @@ def get_weather_information(city: str):
    """
    Get the current weather information for a given city.
    """
-   url = f"https://wttr.in/{city}?format=%C+%t"
+   url = f"http://wttr.in/{city}?format=%C+%t"
    response = requests.get(url)
    text = response.text
    return text
