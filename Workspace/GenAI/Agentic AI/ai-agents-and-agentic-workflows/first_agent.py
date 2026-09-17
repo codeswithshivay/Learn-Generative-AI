@@ -234,6 +234,11 @@ get_weather_information(input)
 Purpose:
 Retrieve current weather information for a city.
 
+run_command(command)
+
+Purpose:
+Run a command in the user's machine.
+
 ==================================================
 FINAL REMINDER
 ==================================================
@@ -264,14 +269,14 @@ message_history: list[ChatCompletionMessageParam] = [
 class AgentResponse(BaseModel):
   step: str = Field(..., description="One of: START, PLAN, TOOL, OBSERVE, END")
   content: Optional[str] = Field(None, description="Content for START, PLAN, or END")
-  tool: Optional[str] = Field(None, description="Tool name, only for TOOL step")
+  tool: Optional[str] = Field(None, description="Tool name, only for TOOL step, can be (get_weather_information: when needed weather information, run_command: when needed to execute a command on user's machine to do something)")
   input: Optional[str] = Field(None, description="Tool input, only for TOOL step")
   output: Optional[str] = Field(None, description="Tool output, only for OBSERVE step")
 
 while True:
    # LLM Call
    response = client.beta.chat.completions.parse(
-      model="gemini-3.5-flash",
+      model="gemini-3.8-flash",
       messages=message_history,
       response_format=AgentResponse,
    )
