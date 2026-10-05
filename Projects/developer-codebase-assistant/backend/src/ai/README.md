@@ -8,5 +8,4 @@ It intentionally contains no model-provider integrations, prompts, embeddings, d
 
 Future ordinary backend services should communicate with this module through explicit application-level contracts. HTTP controllers should continue to handle request and response concerns and delegate operations to services; they should not call model providers directly or contain AI workflow logic.
 
-No AI module is imported or called by the running application in Milestone 1.
-
+No AI module is imported or called by the running application in Milestone 2.
