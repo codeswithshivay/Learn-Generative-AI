@@ -1,0 +1,19 @@
+Milestone 1 — Project foundation
+
+Create the repository structure, frontend and backend applications, TypeScript configurations, environment configuration, and development scripts.
+
+Milestone 2 — Backend and database
+
+Connect MongoDB, establish configuration and error handling, and create the basic user and project data models.
+
+Milestone 3 — Frontend foundation
+
+Create the application layout, routing, project dashboard, and basic project creation interface.
+
+Milestone 4 — Application integration
+
+Connect the frontend to the backend, implement the required project-management flows, and verify the full request lifecycle.
+
+Milestone 5 — Your AI Engineering work
+
+Implement codebase ingestion, retrieval, RAG, agent orchestration, code modifications, and verification in dedicated AI modules.
