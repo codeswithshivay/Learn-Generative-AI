@@ -6,7 +6,7 @@ The Developer Codebase Assistant will eventually help developers understand and 
 
 - Frontend: React, TypeScript, Vite
 - Backend: Node.js, Express, TypeScript
-- Database: MongoDB (planned for Milestone 2)
+- Database: MongoDB (remote MongoDB Cluster)
 
 ## Repository structure
 
@@ -34,7 +34,7 @@ cd ../backend
 npm install
 ```
 
-Copy `.env.example` to `.env` in the repository root when local environment configuration is needed. The backend currently uses only `PORT`; no database, model, or secret configuration is required in this milestone.
+Copy `.env.example` to `.env` in the repository root. Set `MONGODB_URI` locally to your own remote MongoDB Cluster connection string; credentials are intentionally not included in this repository. Keep `.env` uncommitted because it is ignored by Git. `PORT` defaults to `3000`.
 
 ## Development
 
@@ -80,5 +80,4 @@ npm run build
 
 ## Scope boundary
 
-MongoDB integration, authentication, project management, codebase ingestion, retrieval, RAG, model providers, agents, code modifications, and verification workflows are intentionally not implemented. Future backend application services should depend on an explicit AI-module contract, while controllers remain responsible only for HTTP concerns; no AI service is called by the running application in this milestone.
-
+Authentication, user/project CRUD, codebase ingestion, retrieval, RAG, model providers, agents, code modifications, and verification workflows are intentionally not implemented. Milestone 2 adds the MongoDB connection, initial User and Project models, and basic centralized error handling. Future backend application services should depend on an explicit AI-module contract, while controllers remain responsible only for HTTP concerns; no AI service is called by the running application in this milestone.
