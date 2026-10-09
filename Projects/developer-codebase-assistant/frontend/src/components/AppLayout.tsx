@@ -1,6 +1,12 @@
 import { NavLink, Outlet } from 'react-router-dom';
+import { useAuth } from '../auth/AuthContext';
 
 export function AppLayout() {
+  const { user, logout } = useAuth();
+  async function handleLogout() {
+    try { await logout(); } catch { /* Keep the authenticated state if the server did not confirm logout. */ }
+  }
+
   return (
     <div className="app-shell">
       <header className="app-header">
@@ -17,6 +23,8 @@ export function AppLayout() {
             >
               Projects
             </NavLink>
+            <span className="user-email">{user?.email}</span>
+            <button className="button button-ghost logout-button" type="button" onClick={handleLogout}>Log out</button>
           </nav>
         </div>
       </header>

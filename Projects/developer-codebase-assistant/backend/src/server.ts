@@ -15,7 +15,7 @@ const startServer = async (): Promise<void> => {
       process.exitCode = 1;
     });
   } catch (error) {
-    console.error('Backend startup failed because the database connection could not be established.', error);
+    console.error('Backend startup failed because configuration or the database connection is invalid.', error);
     process.exitCode = 1;
   }
 };

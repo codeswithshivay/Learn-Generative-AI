@@ -10,9 +10,19 @@ if (!Number.isInteger(port) || port < 1 || port > 65535) {
 }
 
 const mongodbUri = process.env.MONGODB_URI?.trim();
-console.log('Mongodb uri', mongodbUri);
 if (!mongodbUri) {
   throw new Error('MONGODB_URI is required. Provide the remote MongoDB connection string in the local environment.');
 }
 
-export const env = { mongodbUri, port } as const;
+const jwtSecret = process.env.JWT_SECRET?.trim();
+if (!jwtSecret || jwtSecret.length < 32) {
+  throw new Error('JWT_SECRET is required and must be at least 32 characters long.');
+}
+
+const jwtExpiresIn = process.env.JWT_EXPIRES_IN?.trim() || '1d';
+const frontendOrigin = process.env.FRONTEND_ORIGIN?.trim();
+if (!frontendOrigin) {
+  throw new Error('FRONTEND_ORIGIN is required, for example http://localhost:5173.');
+}
+
+export const env = { mongodbUri, port, jwtSecret, jwtExpiresIn, frontendOrigin } as const;
