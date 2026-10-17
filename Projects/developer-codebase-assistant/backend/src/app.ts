@@ -3,6 +3,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { env } from './config/env.js';
 import { authRouter } from './routes/auth.routes.js';
+import { projectsRouter } from './routes/projects.routes.js';
 import { errorHandler, notFoundHandler } from './middleware/error-handler.js';
 import { csrfOriginGuard } from './middleware/csrf-origin.js';
 
@@ -18,6 +19,7 @@ app.get('/api/health', (_request, response) => {
 });
 
 app.use('/api/auth', authRouter);
+app.use('/api/projects', projectsRouter);
 
 app.use(notFoundHandler);
 app.use(errorHandler);
