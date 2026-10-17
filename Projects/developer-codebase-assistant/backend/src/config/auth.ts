@@ -1,4 +1,5 @@
 import type { CookieOptions } from 'express';
+import type { SignOptions } from 'jsonwebtoken';
 import { env } from './env.js';
 
 export const authCookieName = 'dca_auth';
@@ -12,7 +13,7 @@ export const authCookieOptions: CookieOptions = {
   maxAge: authCookieMaxAgeMs,
 };
 
-export const jwtOptions = {
+export const jwtOptions: SignOptions = {
   algorithm: 'HS256' as const,
-  expiresIn: env.jwtExpiresIn,
+  expiresIn: env.jwtExpiresIn as SignOptions['expiresIn'],
 };
