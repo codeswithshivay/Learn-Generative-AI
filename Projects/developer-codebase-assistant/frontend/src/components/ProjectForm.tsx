@@ -1,5 +1,7 @@
 import { FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ApiError } from '../api/client';
+import { projectsApi } from '../api/projects';
 
 type FormValues = { name: string; path: string };
 type FormErrors = Partial<Record<keyof FormValues, string>>;
@@ -10,7 +12,8 @@ export function ProjectForm() {
   const navigate = useNavigate();
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState<FormErrors>({});
-  const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   function validate(nextValues: FormValues): FormErrors {
     const nextErrors: FormErrors = {};
@@ -19,26 +22,35 @@ export function ProjectForm() {
     return nextErrors;
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const nextErrors = validate(values);
     setErrors(nextErrors);
-    if (Object.keys(nextErrors).length === 0) setSubmitted(true);
+    setSubmitError(null);
+    if (Object.keys(nextErrors).length > 0) return;
+
+    setIsSubmitting(true);
+    try {
+      await projectsApi.create({ name: values.name.trim(), path: values.path.trim() });
+      navigate('/projects', { replace: true, state: { notice: 'Project created successfully.' } });
+    } catch (requestError: unknown) {
+      setSubmitError(requestError instanceof ApiError && requestError.status === 401
+        ? 'Your session has expired. Please sign in again.'
+        : requestError instanceof Error ? requestError.message : 'Project could not be created.');
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   function updateField(field: keyof FormValues, value: string) {
     setValues((current) => ({ ...current, [field]: value }));
     setErrors((current) => ({ ...current, [field]: undefined }));
-    setSubmitted(false);
+    setSubmitError(null);
   }
 
   return (
     <form className="panel project-form" onSubmit={handleSubmit} noValidate>
-      {submitted && (
-        <div className="form-notice" role="status">
-          Project details are valid and ready for backend integration. Nothing has been saved yet.
-        </div>
-      )}
+      {submitError && <div className="form-notice error-state" role="alert">{submitError}</div>}
       <div className="form-field">
         <label htmlFor="project-name">Project name</label>
         <input
@@ -69,7 +81,9 @@ export function ProjectForm() {
         {errors.path && <p className="field-error" id="project-path-error">{errors.path}</p>}
       </div>
       <div className="form-actions">
-        <button className="button button-primary" type="submit">Validate project</button>
+        <button className="button button-primary" type="submit" disabled={isSubmitting}>
+          {isSubmitting ? 'Creating project…' : 'Create project'}
+        </button>
         <button className="button button-ghost" type="button" onClick={() => navigate('/projects')}>
           Cancel
         </button>

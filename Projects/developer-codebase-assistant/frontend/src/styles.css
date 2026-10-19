@@ -42,6 +42,15 @@ h2 { font-size: 1.15rem; margin-bottom: .55rem; }
 .empty-state { align-items: center; display: flex; flex-direction: column; min-height: 330px; justify-content: center; padding: 2.5rem; text-align: center; }
 .empty-state p { color: #64708a; line-height: 1.6; margin-bottom: 1.5rem; max-width: 410px; }
 .empty-state-icon { align-items: center; background: #edf1ff; border-radius: 50%; color: #3156d8; display: flex; font-size: 1.6rem; height: 3.5rem; justify-content: center; margin-bottom: 1.25rem; width: 3.5rem; }
+.status-panel { padding: 2rem; }
+.error-state { color: #b33232; }
+.error-state h2 { color: #172033; }
+.error-state p { margin-bottom: 0; }
+.project-grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+.project-card { min-height: 170px; padding: 1.4rem; }
+.project-card h2 { margin-bottom: .8rem; }
+.project-path { color: #64708a; line-height: 1.5; overflow-wrap: anywhere; }
+.project-updated { color: #7a8498; font-size: .8rem; margin-bottom: 0; }
 .button { border: 0; border-radius: .5rem; cursor: pointer; display: inline-flex; font-size: .9rem; font-weight: 700; justify-content: center; padding: .75rem 1.05rem; transition: background .15s ease, color .15s ease; }
 .button-primary { background: #3156d8; color: white; }
 .button-primary:hover { background: #2747b8; }
