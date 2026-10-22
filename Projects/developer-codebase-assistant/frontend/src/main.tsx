@@ -6,6 +6,7 @@ import { ProtectedRoute } from './components/ProtectedRoute';
 import { AuthProvider } from './auth/AuthContext';
 import { AuthPage } from './pages/AuthPage';
 import { ProjectCreatePage } from './pages/ProjectCreatePage';
+import { ProjectChatPage } from './pages/ProjectChatPage';
 import { ProjectsPage } from './pages/ProjectsPage';
 import './styles.css';
 
@@ -21,6 +22,7 @@ function App() {
               <Route index element={<Navigate to="/projects" replace />} />
               <Route path="/projects" element={<ProjectsPage />} />
               <Route path="/projects/new" element={<ProjectCreatePage />} />
+              <Route path="/projects/:projectId/chat" element={<ProjectChatPage />} />
             </Route>
           </Route>
         </Routes>

@@ -1,4 +1,5 @@
 import { ProjectModel } from '../models/project.model.js';
+import type { ProjectChatResponse } from '../types/chat.js';
 import type { ProjectInput, ProjectUpdate } from '../types/project.js';
 
 export async function createProject(input: ProjectInput, userId: string) {
@@ -23,4 +24,11 @@ export async function updateProject(projectId: string, userId: string, update: P
     { $set: update },
     { new: true, runValidators: true },
   );
+}
+
+export async function sendProjectChatMessage(projectId: string, userId: string, _message: string): Promise<ProjectChatResponse | null> {
+  const project = await getProject(projectId, userId);
+  if (!project) return null;
+
+  return { message: 'LLM is yet to be integrated.' };
 }

@@ -68,11 +68,12 @@ export function ProjectsPage() {
       {!isLoading && !error && projects.length > 0 && (
         <div className="project-grid" aria-label="Your projects">
           {projects.map((project) => (
-            <article className="panel project-card" key={project._id}>
+            <Link className="panel project-card" key={project._id} to={`/projects/${project._id}/chat`}>
               <h2>{project.name}</h2>
               <p className="project-path">{project.path}</p>
               <p className="project-updated">Updated {formatDate(project.updatedAt)}</p>
-            </article>
+              <span className="project-card-action">Open chat →</span>
+            </Link>
           ))}
         </div>
       )}

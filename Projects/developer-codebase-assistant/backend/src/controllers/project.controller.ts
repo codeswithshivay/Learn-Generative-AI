@@ -4,8 +4,10 @@ import {
   createProject,
   getProject,
   listProjects,
+  sendProjectChatMessage,
   updateProject,
 } from '../services/project.service.js';
+import { validateProjectChatInput } from '../validators/chat.validator.js';
 import { validateProjectInput, validateProjectUpdate } from '../validators/project.validator.js';
 
 const invalidProjectIdResponse = { error: 'Bad Request', message: 'A valid project ID is required.' };
@@ -76,6 +78,35 @@ export const update: RequestHandler = async (request, response, next) => {
     }
 
     response.json({ project });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const chat: RequestHandler = async (request, response, next) => {
+  try {
+    const projectId = getValidProjectId(request.params.projectId);
+    if (!projectId) {
+      response.status(400).json(invalidProjectIdResponse);
+      return;
+    }
+
+    const input = validateProjectChatInput(request.body);
+    if (!input) {
+      response.status(400).json({
+        error: 'Bad Request',
+        message: 'A non-empty message up to 4000 characters is required.',
+      });
+      return;
+    }
+
+    const result = await sendProjectChatMessage(projectId, request.auth!.userId, input.message);
+    if (!result) {
+      response.status(404).json(projectNotFoundResponse);
+      return;
+    }
+
+    response.json(result);
   } catch (error) {
     next(error);
   }
